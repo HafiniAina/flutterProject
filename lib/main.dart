@@ -1,7 +1,8 @@
 import 'package:exe2flutterday6/TextBloc.dart';
 import 'package:flutter/cupertino.dart';
-import 'dart:async'; 
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:exe2flutterday6/postPage.dart';
 
 void main() {
   runApp(MyApp());
@@ -33,7 +34,7 @@ class _ButtonWidgetState extends State<ButtonWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Retrieve Text'),
+          title: const Text('Please enter your username'),
         ),
         body: Column(
           children: [
@@ -45,29 +46,32 @@ class _ButtonWidgetState extends State<ButtonWidget> {
                       TextField(
                         onChanged: (String text) => _textBloc.updateText(text),
                       ),
-                      FloatingActionButton(
-                        // When the user presses the button, show an alert dialog containing
-                        // the text that the user has entered into the text field.
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                // Retrieve the text the that user has entered by using the
-                                content: Text(
-                                    (snapshot.hasData ? snapshot.data : "")
-                                        .toString()
-                                        .toUpperCase()),
-                              );
+                      // child: Column(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      Container(
+                          margin: const EdgeInsets.only(top: 150.0),
+                          child: MaterialButton(
+                            minWidth: 180,
+                            height: 60,
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => postPage()));
                             },
-                          );
-                        },
-                        tooltip: 'Show me the value!',
-                        child: Padding(
-                          padding: EdgeInsets.all(16.10),
-                          child: Icon(Icons.favorite_rounded),
-                        ),
-                      ),
+                            color: Colors.blueGrey.shade500,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50)),
+                            child: const Text(
+                              "Enter",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 18),
+                            ),
+                          ))
+
+                      //tooltip: 'Show me the value!',
                     ],
                   );
                 }),
