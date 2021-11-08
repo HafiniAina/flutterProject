@@ -1,17 +1,20 @@
-import 'package:exe2flutterday6/TextBloc.dart';
-import 'package:exe2flutterday6/postPage.dart';
+import 'package:exe2flutterday6/post_page.dart';
 import 'package:flutter/cupertino.dart';
-import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 
 
-class createPost extends StatelessWidget {
+class CreatePost extends StatelessWidget {
+  CreatePost({required this.channel, Key? key}) : super(key: key);
+  WebSocketChannel channel;
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Post Page'),
+        title: const Text('Create Post Page'),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -19,7 +22,7 @@ class createPost extends StatelessWidget {
           Expanded(
             child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-                child: TextField(
+                child: const TextField(
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'TITLE', 
@@ -30,7 +33,7 @@ class createPost extends StatelessWidget {
           Expanded(
             child: Container(
              padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-              child: TextField(
+              child: const TextField(
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'Description', 
@@ -41,7 +44,7 @@ class createPost extends StatelessWidget {
           Expanded(
             child: Container(
                padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-                child: TextField(
+                child: const TextField(
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'Input URL', 
@@ -59,7 +62,7 @@ class createPost extends StatelessWidget {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => postPage()));
+                                      builder: (context) => PostPage(channel: channel,)));
                             },
                             color: Colors.blueGrey.shade500,
                             shape: RoundedRectangleBorder(

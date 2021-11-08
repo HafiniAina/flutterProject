@@ -1,44 +1,22 @@
 import 'package:exe2flutterday6/TextBloc.dart';
 import 'package:flutter/cupertino.dart';
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:exe2flutterday6/postPage.dart';
+import 'package:exe2flutterday6/post_page.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: HomePage(),
+  ));
 }
 
 
 class HomePage extends StatelessWidget {
   final channel = WebSocketChannel.connect(
-    Uri.parsel('ws://besquare-demo')
-  )
-}
-  
-
-
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: ButtonWidget());
-  }
-}
-
-// ignore: use_key_in_widget_constructors
-class ButtonWidget extends StatefulWidget {
-  @override
-  _ButtonWidgetState createState() => _ButtonWidgetState();
-}
-
-class _ButtonWidgetState extends State<ButtonWidget> {
+    Uri.parse('ws://besquare-demo'),
+  );
   final _textBloc = UserTextBloc();
-  //TextEditingController _titleController
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +45,7 @@ class _ButtonWidgetState extends State<ButtonWidget> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => postPage()));
+                                      builder: (context) => PostPage(channel: channel,)));
                             },
                             color: Colors.blueGrey.shade500,
                             shape: RoundedRectangleBorder(
@@ -88,4 +66,7 @@ class _ButtonWidgetState extends State<ButtonWidget> {
           ],
         ));
   }
+
 }
+  
+

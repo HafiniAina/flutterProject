@@ -1,15 +1,40 @@
-import 'package:exe2flutterday6/TextBloc.dart';
 import 'package:flutter/cupertino.dart';
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:exe2flutterday6/createPost.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+import 'dart:convert';
 
+class PostPage extends StatefulWidget {
+  PostPage({required this.channel, Key? key}) : super(key: key);
+  WebSocketChannel channel;
 
-class postPage extends StatelessWidget {
-  postPage({required.this.channel, Key? key}) : super(key:key);
-  WebsocketChannel channel;
   @override
+  _PostPageState createState() => _PostPageState();
+}
 
+class _PostPageState extends State<PostPage> {
+  List savedPost = [];
+
+  late WebSocketChannel channel;
+
+  void get_Posts() {
+    widget.channel.sink.add('{"type" : "get_posts}');
+  }
+
+  List _datalist = [];
+  dynamic decodedPost;
+
+  initState() {
+    super.initState();
+    channel.stream.listen((results) {
+      decodedPost = jsonDecode(results);
+      if (decodedPost['type'] == 'all_posts') {
+        _datalist = decodedPost['data']['posts'];
+        //print(ListPost);
+      }
+      setState(() {});
+    });
+    get_Posts();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +58,8 @@ class postPage extends StatelessWidget {
             ),
 
             // Display the data loaded from layout.json
-            //_datalist.isNotEmpty
-                Expanded(
+            _datalist.isNotEmpty
+                ? Expanded(
                     child: ListView.builder(
                       itemCount: _datalist.length,
                       itemBuilder: (context, index) {
@@ -49,19 +74,23 @@ class postPage extends StatelessWidget {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 30,
-                                      backgroundColor: Colors.transparent,
-                                      backgroundImage:
-                                          // (_datalist[index]["avatar"]
-                                          //         .isNotEmpty)
-                                          //     ? NetworkImage("avatar.jpg"):
-                                          NetworkImage((_datalist[index]
-                                                  ["avatar"] ??
-                                              "https://image.shutterstock.com/image-illustration/blank-man-profile-head-icon-260nw-1902600802.jpg")),
-                                    ),
-                                  ],
+                                  children: <Widget>[
+                                //     CircleAvatar(
+                                //       radius: 30,
+                                //       backgroundColor: Colors.transparent,
+                                //       backgroundImage:
+                                //           // (_datalist[index]["avatar"]
+                                //           //         .isNotEmpty)
+                                //           //     ? NetworkImage("avatar.jpg"):
+                                //           NetworkImage((_datalist[index]
+                                //                   ["avatar"] ??
+                                //               "https://image.shutterstock.com/image-illustration/blank-man-profile-head-icon-260nw-1902600802.jpg")),
+                                //     ),
+                                //   ],
+                                // ),
+                                // ignore: avoid_unnecessary_containers
+                                Container(
+                                  child: ClipRRect(child: Image.network("${_datalist[index]["image"]}"))
                                 ),
                                 Expanded(
                                   child: Column(
@@ -69,11 +98,10 @@ class postPage extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Container(
-                                        margin: EdgeInsets.only(bottom: 5),
+                                        margin: const EdgeInsets.only(bottom: 5),
                                         child: Text(
-                                          _datalist[index]["title"] +
-                                              ' ',
-                                          style: new TextStyle(
+                                          _datalist[index]["title"],
+                                          style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 15),
                                         ),
@@ -81,14 +109,15 @@ class postPage extends StatelessWidget {
                                       Container(
                                         child: Text(
                                           _datalist[index]["description"],
-                                          style: new TextStyle(
+                                          style: const TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
                                       ),
+                                      // ignore: avoid_unnecessary_containers
                                       Container(
                                         child: Text(
-                                          _datalist[index]["create date"],
-                                          style: new TextStyle(
+                                          _datalist[index]["date"],
+                                          style: const TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
                                       ),
@@ -116,9 +145,7 @@ class postPage extends StatelessWidget {
                                             MainAxisAlignment.center,
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
-                                        children: <Widget>[
-                                          Text('Icon love')
-                                        ],
+                                        children: <Widget>[Text('Icon fav')],
                                       ),
                                     ),
                                   ],
@@ -136,7 +163,4 @@ class postPage extends StatelessWidget {
       ),
     );
   }
-}
-
-class WebsocketChannel {
 }
