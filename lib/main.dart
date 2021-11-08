@@ -8,6 +8,15 @@ void main() {
   runApp(MyApp());
 }
 
+
+class HomePage extends StatelessWidget {
+  final channel = WebSocketChannel.connect(
+    Uri.parsel('ws://besquare-demo')
+  )
+}
+  
+
+
 class MyApp extends StatelessWidget {
   // This widget is the root of your application
   @override
@@ -29,6 +38,7 @@ class ButtonWidget extends StatefulWidget {
 
 class _ButtonWidgetState extends State<ButtonWidget> {
   final _textBloc = UserTextBloc();
+  //TextEditingController _titleController
 
   @override
   Widget build(BuildContext context) {
